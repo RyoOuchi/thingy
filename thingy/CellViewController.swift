@@ -49,17 +49,17 @@ extension CellViewController: UITableViewDelegate, UITableViewDataSource {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
         let nextVC = segue.destination as! ViewController
-        let _ = nextVC.view // ラベルのインスタンス作成のため…ダサいw 他にいい手はないのか.
-
+        let _ = nextVC.view
         nextVC.label.text = sender as? String
         nextVC.searchKey = sender as? String
+        
+        nextVC.request = MKLocalSearch.Request(completer(sender as! MKLocalSearchCompletion, didFailWithError: nil)
+//        Request(completion: sender as! MKLocalSearchCompletion)
+        
     }
-    
-    /// セル選択時（UITableViewDataSource optional）
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-        // 次の画面へ移動
         performSegue(withIdentifier: "next", sender: searchCompleter.results[indexPath.row])
+    
     }
 
 
