@@ -14,11 +14,12 @@ class CellViewController: UIViewController {
 private var searchCompleter = MKLocalSearchCompleter()
 @IBOutlet private weak var tableView: UITableView!
 @IBOutlet private weak var textField: UITextField!
-     
+var localSearchCompletion: MKLocalSearchCompletion!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        searchCompleter.delegate = self
+        searchCompleter.delegate = self as! MKLocalSearchCompleterDelegate
         tableView.delegate = self
         tableView.dataSource = self
     }
@@ -43,22 +44,40 @@ extension CellViewController: UITableViewDelegate, UITableViewDataSource {
         let completion = searchCompleter.results[indexPath.row]
         cell.textLabel?.text = completion.title
         cell.detailTextLabel?.text = completion.subtitle
+        print(completion)
         return cell
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//
+//        let nextVC = segue.destination as! ViewController
+//        let _ = nextVC.view
+//        nextVC.label.text = sender as? String
+//        nextVC.searchKey = sender as? String
+//
+//        nextVC.request = MKLocalSearch.Request(completer(sender as! MKLocalSearchCompletion, didFailWithError: nil)
+//        request(completion: sender as! MKLocalSearchCompletion)
+//
+    
+//    @IBAction func byPerformSegue(_ sender: Any) {
+//        self.performSegue(withIdentifier: "toViewController", sender: nil)
+//    }
 
-        let nextVC = segue.destination as! ViewController
-        let _ = nextVC.view
-        nextVC.label.text = sender as? String
-        nextVC.searchKey = sender as? String
-        
-        nextVC.request = MKLocalSearch.Request(completer(sender as! MKLocalSearchCompletion, didFailWithError: nil)
-//        Request(completion: sender as! MKLocalSearchCompletion)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toViewController" {
+            let nextVC = segue.destination as! ViewController
+            nextVC.searchKey = textField.text
+            nextVC.localSearchCompletion = localSearchCompletion
+        }
         
     }
+
+    
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "next", sender: searchCompleter.results[indexPath.row])
+        localSearchCompletion = searchCompleter.results[indexPath.row]
+        
+        performSegue(withIdentifier: "toViewController", sender: nil)
     
     }
 
@@ -74,6 +93,7 @@ extension CellViewController: MKLocalSearchCompleterDelegate {
     }
     
 }
+
 
 
 

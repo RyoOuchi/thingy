@@ -13,15 +13,16 @@ class ViewController: UIViewController , UITextFieldDelegate {
     var searchKey: String!
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var Map: MKMapView!
-//    var request:
+    var localSearchCompletion: MKLocalSearchCompletion!
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        
-        print(searchKey)
-        
+        print(localSearchCompletion)
         
         
+
+        let request = MKLocalSearch.Request(completion: localSearchCompletion)
+        let search = MKLocalSearch(request: request)
         
 //        // Do any additional setup after loading the view.
 //            let geocoder = CLGeocoder()
